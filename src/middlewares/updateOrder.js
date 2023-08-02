@@ -31,7 +31,7 @@ async function updateOrder(idOrder, bodyParams){
 
     writeJSON(filePath, jsonData);
 
-    return jsonData;
+    return orderToBeUpdated.objToBeUpdated;
 }
 
 export default updateOrder;
