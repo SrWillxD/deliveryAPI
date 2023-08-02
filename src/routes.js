@@ -2,8 +2,9 @@ import express from 'express';
 const routes = express.Router();
 
 import createAnOrder from "./middlewares/createAnOrder.js";
-import updateOrder from "./middlewares/updateOrder.js"
-import updateOrderDelivery from "./middlewares/updateOrderDelivery.js"
+import updateOrder from "./middlewares/updateOrder.js";
+import updateOrderDelivery from "./middlewares/updateOrderDelivery.js";
+import deleteAnOrder from "./middlewares/deleteAnOrder.js"
 
 
 routes.post("/criarpedido", async(req, res)=>{
@@ -34,7 +35,7 @@ routes.put("/atualizarpedido/:idOrder", async(req, res)=>{
 
         res.send(result);
     } catch(err){
-        console.error('Error in /atualizarpedido route:', err);
+        console.error('Error in /atualizarpedido/:idOrder route:', err);
         res.status(500).json({ error: 'Internal server error'});
     }
 });
@@ -44,7 +45,7 @@ routes.patch("/atualizarentrega/:idOrder", async (req, res)=>{
         const idOrder = parseInt (req.params.idOrder);
         const bodyParams = req.body;
 
-        if (isNaN(idOrder)){
+        if(isNaN(idOrder)){
             return res.status(400).json('O parâmetro deve ser um número inteiro válido.');
         }
 
@@ -60,11 +61,25 @@ routes.patch("/atualizarentrega/:idOrder", async (req, res)=>{
 
         res.send(result);
     } catch (err) {
-        console.error('Error in /atualizarentrega route:', err);
+        console.error('Error in /atualizarentrega/:idOrder route:', err);
         res.status(500).json({ error: 'Internal server error'});
     }
-})
+});
 
+routes.delete("/deletarpedido/:idOrder", async(req, res)=>{
+    try{
+        const idOrder = parseInt (req.params.idOrder);
 
+        if(isNaN(idOrder)){return res.status(400).json('O parâmetro deve ser um número inteiro válido.');}
+
+        const result = await deleteAnOrder(idOrder);
+
+        if(result === "O pedido informado não existe."){return res.status(400).json(result);}
+        if(result === 'Pedido deletado com sucesso.'){return res.json(result);}
+    }catch(err){
+        console.error('Error in /deletarpedido/:idOrder route:', err);
+        res.status(500).json({ error: 'Internal server error'});
+    }
+});
 
 export default routes;
