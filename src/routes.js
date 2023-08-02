@@ -5,6 +5,7 @@ import createAnOrder from "./middlewares/createAnOrder.js";
 import updateOrder from "./middlewares/updateOrder.js";
 import updateOrderDelivery from "./middlewares/updateOrderDelivery.js";
 import deleteAnOrder from "./middlewares/deleteAnOrder.js"
+import showASpecificOrder from "./middlewares/showASpecificOrder.js"
 
 
 routes.post("/criarpedido", async(req, res)=>{
@@ -73,7 +74,7 @@ routes.delete("/deletarpedido/:idOrder", async(req, res)=>{
         if(isNaN(idOrder)){return res.status(400).json('O parâmetro deve ser um número inteiro válido.');}
 
         const result = await deleteAnOrder(idOrder);
-
+        
         if(result === "O pedido informado não existe."){return res.status(400).json(result);}
         if(result === 'Pedido deletado com sucesso.'){return res.json(result);}
     }catch(err){
@@ -81,5 +82,23 @@ routes.delete("/deletarpedido/:idOrder", async(req, res)=>{
         res.status(500).json({ error: 'Internal server error'});
     }
 });
+
+routes.get("/obterpedido/:idOrder", async(req, res)=>{    
+    try {
+        const idOrder = parseInt (req.params.idOrder);
+        
+        if(isNaN(idOrder)){return res.status(400).json('O parâmetro deve ser um número inteiro válido.');}
+        
+        const result = await showASpecificOrder(idOrder);
+        
+        if(result === "O pedido informado não existe."){return res.status(400).json(result);}
+    
+        res.send(result);
+    } catch (err){
+        console.error('Error in /obterpedido/:idOrder route:', err);
+        res.status(500).json({ error: 'Internal server error'});
+    }
+});
+
 
 export default routes;
