@@ -1,20 +1,6 @@
 import captureJSON from "./capture.js";
 import writeJSON from "./writeJSON.js"
 
-/*
-{
-  "nextId": 501,
-  "pedidos": [
-    {
-      "id": 1,
-      "cliente": "Lavínia Dâmaso",
-      "produto": "Pizza Muçarela",
-      "valor": 26,
-      "entregue": true,
-      "timestamp": "2021-05-02T19:48:09.765Z"
-    },
-*/
-
 async function updateOrderDelivery(idOrder, bodyParams){
     const filePath = "./pedidos.json";
     const jsonData = await captureJSON(filePath);
