@@ -8,6 +8,7 @@ import deleteAnOrder from "./middlewares/deleteAnOrder.js";
 import showASpecificOrder from "./middlewares/showASpecificOrder.js";
 import spendingForAParticularCustomer from "./middlewares/spendingForAParticularCustomer.js";
 import totalAmountEarnedByAProduct from "./middlewares/totalAmountEarnedByAProduct.js";
+import topSellingProducts from "./middlewares/topSellingProducts.js";
 
 
 routes.post("/criarpedido", async(req, res)=>{
@@ -132,6 +133,16 @@ routes.get("/ganhosdeumproduto", async(req, res)=>{
         res.json(result);
     } catch (err){
         console.error('Error in /ganhosdeumproduto route:', err);
+        res.status(500).json({ error: 'Internal server error'});
+    }
+});
+
+routes.get("/produtosmaisvendidos", async(req, res)=>{
+    try {
+        const result = await topSellingProducts();
+        res.json(result);
+    } catch (err){
+        console.error('Error in /produtosmaisvendidos route:', err);
         res.status(500).json({ error: 'Internal server error'});
     }
 });
