@@ -4,9 +4,10 @@ const routes = express.Router();
 import createAnOrder from "./middlewares/createAnOrder.js";
 import updateOrder from "./middlewares/updateOrder.js";
 import updateOrderDelivery from "./middlewares/updateOrderDelivery.js";
-import deleteAnOrder from "./middlewares/deleteAnOrder.js"
-import showASpecificOrder from "./middlewares/showASpecificOrder.js"
-import spendingForAParticularCustomer from "./middlewares/spendingForAParticularCustomer.js"
+import deleteAnOrder from "./middlewares/deleteAnOrder.js";
+import showASpecificOrder from "./middlewares/showASpecificOrder.js";
+import spendingForAParticularCustomer from "./middlewares/spendingForAParticularCustomer.js";
+import totalAmountEarnedByAProduct from "./middlewares/totalAmountEarnedByAProduct.js";
 
 
 routes.post("/criarpedido", async(req, res)=>{
@@ -114,6 +115,23 @@ routes.get("/gastosdeumcliente", async(req, res)=>{
         res.json(result);
     } catch (err){
         console.error('Error in /gastosdeumcliente route:', err);
+        res.status(500).json({ error: 'Internal server error'});
+    }
+});
+
+routes.get("/ganhosdeumproduto", async(req, res)=>{
+    try {
+        const bodyParams = req.body;
+
+        if (Object.keys(bodyParams).length === 0){
+            return res.status(400).send('O corpo da requisição deve conter uma chave e valor relacionada ao cliente. Ex: {"produto": "Pizza"}.');
+        }
+
+        const result = await totalAmountEarnedByAProduct(bodyParams);
+
+        res.json(result);
+    } catch (err){
+        console.error('Error in /ganhosdeumproduto route:', err);
         res.status(500).json({ error: 'Internal server error'});
     }
 });
